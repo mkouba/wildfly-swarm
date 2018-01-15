@@ -26,6 +26,25 @@
       <packages>
          <package name="org.eclipse.microprofile.config.tck.*" />
       </packages>
+
+      <classes>
+        <class name="org.eclipse.microprofile.config.tck.ConverterTest">
+            <methods>
+                <exclude name=".*"></exclude>
+            </methods>
+        </class>
+        <class name="org.eclipse.microprofile.config.tck.ClassConverterTest">
+            <methods>
+                <exclude name=".*"></exclude>
+            </methods>
+        </class>
+        <class name="org.eclipse.microprofile.config.tck.ImplicitConverterTest">
+            <methods>
+                <exclude name=".*"></exclude>
+            </methods>
+        </class>
+      </classes>
+
    </test>
 
 </suite>
