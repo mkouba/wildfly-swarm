@@ -51,23 +51,23 @@ class RetryContext {
      *
      * @param retryContext
      * @param throwable
-     * @return {@code true} if we should try again or rethrows the specified exception
+     * @return an exception to rethrow or null if we should try again
      */
-    boolean nextRetry(Throwable throwable) throws Exception {
+    Exception nextRetry(Throwable throwable) {
         // Decrement the retry count for this attempt
         remainingAttempts.decrementAndGet();
         // Check the exception type
         if (shouldRetryOn(throwable, System.nanoTime())) {
             delayIfNeeded();
-            return true;
+            return null;
         } else {
             if (throwable instanceof Error) {
                 throw (Error) throwable;
             } else if (throwable instanceof Exception) {
-                throw (Exception) throwable;
+                return (Exception) throwable;
             } else {
                 // Business method interceptors may only throw exceptions
-                throw new FaultToleranceException(throwable);
+                return new FaultToleranceException(throwable);
             }
         }
     }
@@ -103,11 +103,16 @@ class RetryContext {
         return Arrays.stream(retryOn).anyMatch(t -> t.isAssignableFrom(throwable.getClass()));
     }
 
-    void delayIfNeeded() throws InterruptedException {
-        if (delay > 0) {
-            long jitterBase = config.getJitter();
-            long jitter = (long) (Math.random() * ((jitterBase * 2) + 1)) - jitterBase; // random number between -jitter and +jitter
-            TimeUnit.MILLISECONDS.sleep(delay + Duration.of(jitter, config.getJitterDelayUnit()).toMillis());
+    void delayIfNeeded() {
+        try {
+            if (delay > 0) {
+                long jitterBase = config.getJitter();
+                long jitter = (long) (Math.random() * ((jitterBase * 2) + 1)) - jitterBase; // random number between -jitter and +jitter
+                TimeUnit.MILLISECONDS.sleep(delay + Duration.of(jitter, config.getJitterDelayUnit()).toMillis());
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted during retry delay");
         }
     }
 
