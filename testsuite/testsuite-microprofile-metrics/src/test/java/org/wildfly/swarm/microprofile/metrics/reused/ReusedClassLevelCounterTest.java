@@ -67,7 +67,7 @@ public class ReusedClassLevelCounterTest {
                 COUNTER_NAME + " not found; registered counters: "
                         + appMetrics.getCounters().entrySet().stream().map(e -> e.getKey() + " = " + e.getValue().getCount()).collect(Collectors.joining(", ")),
                 counter);
-        // 1x LogService constructor, 1x error(), 1x info
+        // 1x LogService constructor, 1x error(), 2x info
         assertThat(counter.getCount(), allOf(equalTo(4l), equalTo(LogService.COUNTER.get())));
     }
 

@@ -16,19 +16,20 @@
 
 package org.wildfly.swarm.microprofile.metrics.deployment;
 
-import org.eclipse.microprofile.metrics.MetricRegistry;
-import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Gauge;
-import org.eclipse.microprofile.metrics.annotation.Metered;
-import org.eclipse.microprofile.metrics.annotation.Timed;
-
-import javax.enterprise.inject.Vetoed;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Collections;
+
+import javax.enterprise.inject.Vetoed;
+
+import org.eclipse.microprofile.metrics.MetricRegistry;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 @Vetoed
 /* package-private */ class MetricResolver {
@@ -80,17 +81,17 @@ import java.util.Collections;
 
     // TODO: should be grouped with the metric name strategy
     private <E extends Member & AnnotatedElement> String metricName(E element, Class<? extends Annotation> type, String name, boolean absolute) {
-        String metric = name.isEmpty() ? defaultName(element, type) : metricName.of(name);
-        return absolute ? metric : MetricRegistry.name(element.getDeclaringClass(), metric);
+        return metricName(element.getDeclaringClass(), element, type, name, absolute);
     }
 
-    private <E extends Member & AnnotatedElement> String metricName(Class<?> bean, E element, Class<? extends Annotation> type, String name, boolean absolute) {
-        String metric = name.isEmpty() ? bean.getSimpleName() : metricName.of(name);
-        return absolute ? MetricRegistry.name(metric, defaultName(element, type)) : MetricRegistry.name(bean.getPackage().getName(), metric, defaultName(element, type));
+    private <E extends Member & AnnotatedElement> String metricName(Class<?> clazz, E element, Class<? extends Annotation> type, String name, boolean absolute) {
+        // If name is not explicitly set the name of the annotated element is used
+        name = name.isEmpty() ? defaultName(element, type) : metricName.of(name);
+        // If not absolute then prepend the package name and class name
+        return absolute ? name : MetricRegistry.name(clazz, name);
     }
 
     private <E extends Member & AnnotatedElement> String defaultName(E element, Class<? extends Annotation> type) {
-
         return memberName(element);
     }
 
