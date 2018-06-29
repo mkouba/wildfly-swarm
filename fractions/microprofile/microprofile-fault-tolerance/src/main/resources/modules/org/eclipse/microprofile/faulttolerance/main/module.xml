@@ -17,8 +17,26 @@
    <resources>
       <artifact
          name="org.eclipse.microprofile.fault-tolerance:microprofile-fault-tolerance-api:${version.microprofile-fault-tolerance}" />
+      <artifact
+          name="io.smallrye:smallrye-fault-tolerance:${version.smallrye-fault-tolerance}" />
    </resources>
    <dependencies>
-      <module name="javax.enterprise.api" />
+      <module export="true" name="org.wildfly.swarm.microprofile.faulttolerance" slot="main"/>
+      <module name="org.wildfly.swarm.bootstrap" optional="true"/>
+      <module name="org.wildfly.swarm.container" slot="runtime"/>
+      <module name="org.wildfly.swarm.spi" slot="runtime"/>
+      <module name="javax.enterprise.api"/>
+      <module name="org.jboss.weld.core" export="true"/>
+      <module name="javax.enterprise.api" slot="main"/>
+      <module name="javax.annotation.api" slot="main"/>
+      <module name="javax.enterprise.concurrent.api" slot="main"/>
+      <module name="javax.api" slot="main"/>
+      <module name="com.netflix.hystrix" slot="main"/>
+      <module name="org.jboss.logging" slot="main"/>
+      <module name="org.wildfly.swarm.configuration.microprofile.config" slot="main"/>
+      <module name="org.wildfly.extension.microprofile.config" slot="main"/>
+      <module name="org.eclipse.microprofile.config.api" slot="main"/>
+      <module name="org.wildfly.swarm.logging" slot="main"/>
+      <module name="org.jboss.weld.api" slot="main" export="true"/>
    </dependencies>
 </module>

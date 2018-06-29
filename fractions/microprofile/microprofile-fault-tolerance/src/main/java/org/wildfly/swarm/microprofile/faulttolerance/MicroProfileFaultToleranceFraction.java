@@ -19,6 +19,7 @@ package org.wildfly.swarm.microprofile.faulttolerance;
 import org.wildfly.swarm.config.runtime.AttributeDocumentation;
 import org.wildfly.swarm.spi.api.Defaultable;
 import org.wildfly.swarm.spi.api.Fraction;
+import org.wildfly.swarm.spi.api.Module;
 import org.wildfly.swarm.spi.api.annotations.Configurable;
 import org.wildfly.swarm.spi.api.annotations.DeploymentModule;
 import org.wildfly.swarm.spi.api.annotations.DeploymentModule.MetaInfDisposition;
@@ -26,7 +27,7 @@ import org.wildfly.swarm.spi.api.annotations.DeploymentModule.MetaInfDisposition
 /**
  * @author Antoine Sabot-Durand
  */
-@DeploymentModule(name = "org.wildfly.swarm.microprofile.faulttolerance", export = true, slot = "deployment", metaInf = MetaInfDisposition.IMPORT)
+@DeploymentModule(name = "org.eclipse.microprofile.faulttolerance", metaInf = MetaInfDisposition.IMPORT, export = true, services = Module.ServiceHandling.IMPORT)
 public class MicroProfileFaultToleranceFraction implements Fraction<MicroProfileFaultToleranceFraction> {
 
     public MicroProfileFaultToleranceFraction() {
