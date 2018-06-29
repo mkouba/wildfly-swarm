@@ -27,7 +27,7 @@ import org.wildfly.swarm.spi.api.annotations.DeploymentModule.MetaInfDisposition
 /**
  * @author Antoine Sabot-Durand
  */
-@DeploymentModule(name = "org.eclipse.microprofile.faulttolerance", metaInf = MetaInfDisposition.IMPORT, export = true, services = Module.ServiceHandling.IMPORT)
+@DeploymentModule(name = "io.smallrye.faulttolerance", metaInf = MetaInfDisposition.IMPORT, export = true, services = Module.ServiceHandling.IMPORT)
 public class MicroProfileFaultToleranceFraction implements Fraction<MicroProfileFaultToleranceFraction> {
 
     public MicroProfileFaultToleranceFraction() {
